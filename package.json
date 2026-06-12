@@ -5,11 +5,23 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "node --watch src/index.js"
+    "dev": "node --watch src/index.js",
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/test/**/*.test.js"
+    ]
   },
   "dependencies": {
+    "dotenv": "^16.4.0",
     "express": "^4.21.0",
-    "pg": "^8.13.0",
-    "dotenv": "^16.4.0"
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "jest": "^30.4.2",
+    "supertest": "^7.2.2"
   }
 }

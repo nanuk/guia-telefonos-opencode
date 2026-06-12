@@ -9,6 +9,10 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use('/api/contactos', contactsRouter);
 
-app.listen(PORT, () => {
-  console.log(`Microservicio corriendo en el puerto ${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Microservicio corriendo en el puerto ${PORT}`);
+  });
+}
+
+module.exports = app;
