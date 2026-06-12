@@ -6,7 +6,7 @@ const app = require('../../src/index');
 
 describe('GET /api/contactos', () => {
   it('debe retornar todos los contactos', async () => {
-    const fakeRows = [{ id: 1, nombre: 'Juan', apellido: 'Pérez', numero: '123456789' }];
+    const fakeRows = [{ id: 1, nombre: 'Juan', apellido: 'Pérez', sobrenombre: 'Juanito', numero: '123456789' }];
     mockQuery.mockResolvedValue({ rows: fakeRows });
 
     const res = await request(app).get('/api/contactos');
@@ -18,7 +18,7 @@ describe('GET /api/contactos', () => {
 
 describe('GET /api/contactos/:id', () => {
   it('debe retornar un contacto por id', async () => {
-    const fakeRow = { id: 1, nombre: 'Juan', apellido: 'Pérez', numero: '123456789' };
+    const fakeRow = { id: 1, nombre: 'Juan', apellido: 'Pérez', sobrenombre: 'Juanito', numero: '123456789' };
     mockQuery.mockResolvedValue({ rows: [fakeRow] });
 
     const res = await request(app).get('/api/contactos/1');
@@ -38,8 +38,8 @@ describe('GET /api/contactos/:id', () => {
 });
 
 describe('POST /api/contactos', () => {
-  it('debe crear un contacto nuevo', async () => {
-    const input = { nombre: 'Ana', apellido: 'López', numero: '987654321' };
+  it('debe crear un contacto nuevo con sobrenombre', async () => {
+    const input = { nombre: 'Ana', apellido: 'López', sobrenombre: 'Anita', numero: '987654321' };
     const fakeRow = { id: 2, ...input };
     mockQuery.mockResolvedValue({ rows: [fakeRow] });
 
@@ -58,8 +58,8 @@ describe('POST /api/contactos', () => {
 });
 
 describe('PUT /api/contactos/:id', () => {
-  it('debe actualizar un contacto existente', async () => {
-    const input = { nombre: 'Juan', apellido: 'Pérez', numero: '111111111' };
+  it('debe actualizar un contacto existente con sobrenombre', async () => {
+    const input = { nombre: 'Juan', apellido: 'Pérez', sobrenombre: 'Juancho', numero: '111111111' };
     const fakeRow = { id: 1, ...input };
     mockQuery.mockResolvedValue({ rows: [fakeRow] });
 

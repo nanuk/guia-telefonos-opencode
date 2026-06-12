@@ -17,7 +17,7 @@ describe('contactsController', () => {
 
   describe('getAll', () => {
     it('debe retornar todos los contactos', async () => {
-      const fakeRows = [{ id: 1, nombre: 'Juan', apellido: 'Pérez', numero: '123456789' }];
+      const fakeRows = [{ id: 1, nombre: 'Juan', apellido: 'Pérez', sobrenombre: 'Juanito', numero: '123456789' }];
       mockQuery.mockResolvedValue({ rows: fakeRows });
 
       await getAll(req, res);
@@ -30,7 +30,7 @@ describe('contactsController', () => {
   describe('getById', () => {
     it('debe retornar un contacto por id', async () => {
       req.params.id = '1';
-      const fakeRow = { id: 1, nombre: 'Juan', apellido: 'Pérez', numero: '123456789' };
+      const fakeRow = { id: 1, nombre: 'Juan', apellido: 'Pérez', sobrenombre: 'Juanito', numero: '123456789' };
       mockQuery.mockResolvedValue({ rows: [fakeRow] });
 
       await getById(req, res);
@@ -51,16 +51,31 @@ describe('contactsController', () => {
   });
 
   describe('create', () => {
-    it('debe crear un contacto nuevo', async () => {
-      req.body = { nombre: 'Ana', apellido: 'López', numero: '987654321' };
+    it('debe crear un contacto nuevo con sobrenombre', async () => {
+      req.body = { nombre: 'Ana', apellido: 'López', sobrenombre: 'Anita', numero: '987654321' };
       const fakeRow = { id: 2, ...req.body };
       mockQuery.mockResolvedValue({ rows: [fakeRow] });
 
       await create(req, res);
 
       expect(mockQuery).toHaveBeenCalledWith(
-        'INSERT INTO contactos (nombre, apellido, numero) VALUES ($1, $2, $3) RETURNING *',
-        ['Ana', 'López', '987654321']
+        'INSERT INTO contactos (nombre, apellido, sobrenombre, numero) VALUES ($1, $2, $3, $4) RETURNING *',
+        ['Ana', 'López', 'Anita', '987654321']
+      );
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.json).toHaveBeenCalledWith(fakeRow);
+    });
+
+    it('debe crear un contacto nuevo sin sobrenombre', async () => {
+      req.body = { nombre: 'Ana', apellido: 'López', numero: '987654321' };
+      const fakeRow = { id: 2, ...req.body, sobrenombre: null };
+      mockQuery.mockResolvedValue({ rows: [fakeRow] });
+
+      await create(req, res);
+
+      expect(mockQuery).toHaveBeenCalledWith(
+        'INSERT INTO contactos (nombre, apellido, sobrenombre, numero) VALUES ($1, $2, $3, $4) RETURNING *',
+        ['Ana', 'López', null, '987654321']
       );
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalledWith(fakeRow);
@@ -77,17 +92,32 @@ describe('contactsController', () => {
   });
 
   describe('update', () => {
-    it('debe actualizar un contacto existente', async () => {
+    it('debe actualizar un contacto existente con sobrenombre', async () => {
       req.params.id = '1';
-      req.body = { nombre: 'Juan', apellido: 'Pérez', numero: '111111111' };
+      req.body = { nombre: 'Juan', apellido: 'Pérez', sobrenombre: 'Juancho', numero: '111111111' };
       const fakeRow = { id: 1, ...req.body };
       mockQuery.mockResolvedValue({ rows: [fakeRow] });
 
       await update(req, res);
 
       expect(mockQuery).toHaveBeenCalledWith(
-        'UPDATE contactos SET nombre = $1, apellido = $2, numero = $3 WHERE id = $4 RETURNING *',
-        ['Juan', 'Pérez', '111111111', '1']
+        'UPDATE contactos SET nombre = $1, apellido = $2, sobrenombre = $3, numero = $4 WHERE id = $5 RETURNING *',
+        ['Juan', 'Pérez', 'Juancho', '111111111', '1']
+      );
+      expect(res.json).toHaveBeenCalledWith(fakeRow);
+    });
+
+    it('debe actualizar un contacto existente sin sobrenombre', async () => {
+      req.params.id = '1';
+      req.body = { nombre: 'Juan', apellido: 'Pérez', numero: '111111111' };
+      const fakeRow = { id: 1, ...req.body, sobrenombre: null };
+      mockQuery.mockResolvedValue({ rows: [fakeRow] });
+
+      await update(req, res);
+
+      expect(mockQuery).toHaveBeenCalledWith(
+        'UPDATE contactos SET nombre = $1, apellido = $2, sobrenombre = $3, numero = $4 WHERE id = $5 RETURNING *',
+        ['Juan', 'Pérez', null, '111111111', '1']
       );
       expect(res.json).toHaveBeenCalledWith(fakeRow);
     });
