@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía Telefónica</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Guía Telefónica</h1>
+
+    <form id="contactForm">
+      <h2 id="formTitle">Nuevo contacto</h2>
+      <input type="hidden" id="contactId">
+      <input type="text" id="nombre" placeholder="Nombre *" required>
+      <input type="text" id="apellido" placeholder="Apellido *" required>
+      <input type="text" id="sobrenombre" placeholder="Sobrenombre">
+      <input type="text" id="numero" placeholder="Número *" required>
+      <div class="form-actions">
+        <button type="submit" id="saveBtn">Guardar</button>
+        <button type="button" id="cancelBtn" class="secondary" style="display:none">Cancelar</button>
+      </div>
+    </form>
+
+    <table id="contactsTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Sobrenombre</th>
+          <th>Número</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="contactsBody"></tbody>
+    </table>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
