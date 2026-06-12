@@ -1,0 +1,14 @@
+const express = require('express');
+require('dotenv').config();
+
+const contactsRouter = require('./routes/contacts');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+app.use('/api/contactos', contactsRouter);
+
+app.listen(PORT, () => {
+  console.log(`Microservicio corriendo en el puerto ${PORT}`);
+});
